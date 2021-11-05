@@ -26,7 +26,7 @@ This is not ready for production, it serves as an example. Use at your own risk.
 
 To get started with `Device Authorization Grant` using the Device Flow Proxy, an OAuth 2.0 provider capable of performing `Authorization Code` flow is required, preferably with PKCE.
 
-This examples uses an open source OAuth2 Provder from [Ory](https://www.ory.sh) named [Hydra](https://www.ory.sh/hydra/)
+This examples uses an open source OAuth2 Provider from [Ory](https://www.ory.sh) named [Hydra](https://www.ory.sh/hydra/)
 
 To get hydra up an running please refer to the documentation. The 5 minute tutorial should be sufficent for example purpose, see https://www.ory.sh/hydra/docs/5min-tutorial/. Use the quickstart guide with hydra, postgres and distributed tracing using jaeger:
 
@@ -35,7 +35,7 @@ docker-compose -f quickstart.yml \
     -f quickstart-postgres.yml \
     -f quickstart-tracing.yml \
     up --build
-``
+```
 
 Getting the device flow proxy up and running with hydra is as simple as performing a checkout and starting the container:
 
