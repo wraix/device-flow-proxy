@@ -1,0 +1,24 @@
+version: '3.7'
+
+services:
+
+  device-flow-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    tty: true
+    environment:
+      #- CFG_SERVE_TRACING_URL=http://jaeger:14268/api/traces
+      - CFG_PATH=/app/examples/ory-hydra-config.yaml
+    volumes:
+      # Source code
+      - .:/app
+    ports:
+      - "8080:8080"
+    networks:
+      - hydra_intranet
+    restart: on-failure
+
+networks:
+  hydra_intranet:
+    name: hydra_intranet

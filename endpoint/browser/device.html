@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>{{.PageTitle}}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+    <div id="page-content">
+        {{if .Code}}
+            <p>Confirm the code below matches the code shown on the device.</p>
+        {{else}}
+            <p>Enter the code shown on your device to continue.</p>
+        {{end}}
+
+        <form action="{{.FormAction}}" method="get">
+        <input type="text" name="code" placeholder="XXXX-XXXX" id="user_code" value="{{.Code}}" autocomplete="off">
+        <input type="submit">
+        </form>
+
+        <script type="text/javascript">
+            document.getElementById("user_code").focus();
+        </script>
+    </div>
+
+</body>
+</html>

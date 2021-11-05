@@ -1,0 +1,9 @@
+serve:
+  tracing:
+    enabled: true
+    url: "http://jaeger:14268/api/traces"
+    provider: "jaeger"
+  devicecodegrant:
+    baseurl: "http://localhost:8080"
+    authorizationendpoint: "http://127.0.0.1:4444/oauth2/auth"
+    tokenendpoint: "http://hydra:4444/oauth2/token"

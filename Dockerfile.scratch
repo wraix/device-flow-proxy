@@ -1,0 +1,25 @@
+# Dockerfile References: https://docs.docker.com/engine/reference/builder/
+
+FROM golang:1.16-alpine AS builder
+
+# Add Maintainer Info
+LABEL maintainer="wraix"
+
+RUN apk add --update --no-cache ca-certificates git curl
+
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
+# Copy everything from the current directory to the PWD(Present Working Directory) inside the container
+COPY . .
+
+# Setup go mod
+RUN go mod tidy
+RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-w -s" -o api .
+
+FROM scratch
+
+COPY --from=builder /app/api /app/api
+
+ENTRYPOINT ["/app/api"]
+CMD ["serve"]
