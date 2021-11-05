@@ -112,7 +112,7 @@ docker-compose -f quickstart.yml exec hydra \
     hydra token introspect \
     --endpoint http://127.0.0.1:4445/ \
     3yvX87sNjFUxgSVB72oleIRyzfdC3yUL5urKoR0tLwI.gXc4NSfiSpBzksfagVuZw63XCjsmR7I2jXaJ7OBZj5c
-``
+```
 
 Response should look something like:
 
