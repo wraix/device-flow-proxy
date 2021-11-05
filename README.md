@@ -3,7 +3,7 @@ A demonstration of the OAuth 2.0 Device Code flow for devices without a browser 
 
 This service acts as an OAuth server that implements the device code flow, proxying to a real OAuth server behind the scenes.
 
-Original implementation in PHP by [Aaron Parecki|https://github.com/aaronpk] can be found here: [Device Flow Proxy Server|https://github.com/aaronpk/Device-Flow-Proxy-Server].
+Original implementation in PHP by [Aaron Parecki](https://github.com/aaronpk) can be found here: [Device Flow Proxy Server](https://github.com/aaronpk/Device-Flow-Proxy-Server).
 
 ## Important Notice
 
@@ -20,13 +20,13 @@ This is not ready for production, it serves as an example. Use at your own risk.
 
 ## Requirements
 
-- [x] OAuth 2 Provider with support for Authorization Code
+- OAuth 2 Provider with support for Authorization Code
 
 ## Getting Started with Device Flow Proxy & Ory Hydra
 
 To get started with `Device Authorization Grant` using the Device Flow Proxy, an OAuth 2.0 provider capable of performing `Authorization Code` flow is required, preferably with PKCE.
 
-This examples uses an open source OAuth2 Provder from [Ory|https:www.ory.sh] named [Hydra|https://www.ory.sh/hydra/]
+This examples uses an open source OAuth2 Provder from [Ory](https://www.ory.sh) named [Hydra](https://www.ory.sh/hydra/)
 
 To get hydra up an running please refer to the documentation. The 5 minute tutorial should be sufficent for example purpose, see https://www.ory.sh/hydra/docs/5min-tutorial/. Use the quickstart guide with hydra, postgres and distributed tracing using jaeger:
 
