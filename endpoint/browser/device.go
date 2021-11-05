@@ -60,7 +60,7 @@ func NewGetDeviceEndpoint() endpoint.EndpointHandler {
 
 	ep.Setup(
 		endpoint.WithSpecification(api.Path{
-			Summary:     "Device Code Validation",
+			Summary:     "Device",
 			Description: ``,
 			Tags:        OPENAPI_TAGS,
 
