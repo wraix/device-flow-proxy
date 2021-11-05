@@ -41,6 +41,7 @@ Getting the device flow proxy up and running with hydra is as simple as performi
 
 ```
 git clone git@github.com:wraix/device-flow-proxy.git
+cd device-flow-proxy
 docker-compose up
 ```
 
