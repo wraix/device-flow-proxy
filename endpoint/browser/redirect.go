@@ -15,6 +15,8 @@ import (
 	"github.com/wraix/device-flow-proxy/endpoint"
 	"github.com/wraix/device-flow-proxy/endpoint/problem"
 
+  "github.com/charmixer/oas/api"
+
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/contrib/propagators/jaeger"
 	"go.opentelemetry.io/otel"
@@ -190,6 +192,19 @@ func (ep GetRedirectEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) 
 
 func NewGetRedirectEndpoint() endpoint.EndpointHandler {
 	ep := GetRedirectEndpoint{}
+
+	ep.Setup(
+		endpoint.WithSpecification(api.Path{
+			Summary:     "Redirect",
+			Description: ``,
+			Tags:        OPENAPI_TAGS,
+
+			Request: api.Request{
+				Description: ``,
+				Schema:      GetRedirectRequest{},
+			},
+		}),
+	)
 
 	return ep
 }

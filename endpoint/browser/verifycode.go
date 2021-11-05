@@ -15,6 +15,8 @@ import (
 	"github.com/wraix/device-flow-proxy/endpoint"
 	"github.com/wraix/device-flow-proxy/endpoint/problem"
 
+  "github.com/charmixer/oas/api"
+
 	"go.opentelemetry.io/otel"
 )
 
@@ -109,6 +111,19 @@ func (ep GetVerifyCodeEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request
 
 func NewGetVerifyCodeEndpoint() endpoint.EndpointHandler {
 	ep := GetVerifyCodeEndpoint{}
+
+	ep.Setup(
+		endpoint.WithSpecification(api.Path{
+			Summary:     "Verify Code",
+			Description: ``,
+			Tags:        OPENAPI_TAGS,
+
+			Request: api.Request{
+				Description: ``,
+				Schema:      GetVerifyCodeRequest{},
+			},
+		}),
+	)
 
 	return ep
 }

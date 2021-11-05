@@ -8,6 +8,8 @@ import (
 	"github.com/wraix/device-flow-proxy/endpoint"
 	"github.com/wraix/device-flow-proxy/endpoint/problem"
 
+  "github.com/charmixer/oas/api"
+
 	"go.opentelemetry.io/otel"
 )
 
@@ -55,6 +57,19 @@ func (ep GetDeviceEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 func NewGetDeviceEndpoint() endpoint.EndpointHandler {
 	ep := GetDeviceEndpoint{}
+
+	ep.Setup(
+		endpoint.WithSpecification(api.Path{
+			Summary:     "Device Code Validation",
+			Description: ``,
+			Tags:        OPENAPI_TAGS,
+
+			Request: api.Request{
+				Description: ``,
+				Schema:      GetDeviceRequest{},
+			},
+		}),
+	)
 
 	return ep
 }
