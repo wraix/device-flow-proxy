@@ -1,4 +1,6 @@
 # Device Flow Proxy
+![ci](https://github.com/wraix/device-flow-proxy/actions/workflows/ci.yml/badge.svg?branch=main)
+
 A demonstration of the OAuth 2.0 Device Code flow for devices without a browser or with limited keyboard entry.
 
 This service acts as an OAuth server that implements the device code flow, proxying to a real OAuth server behind the scenes.
