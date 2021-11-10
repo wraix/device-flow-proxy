@@ -1,5 +1,5 @@
 # Device Flow Proxy
-![CI](https://github.com/wraix/device-flow-proxy/actions/workflows/ci.yml/badge.svg?branch=main)
+![CI](https://github.com/wraix/device-flow-proxy/actions/workflows/ci.yml/badge.svg)
 
 A demonstration of the OAuth 2.0 Device Code flow for devices without a browser or with limited keyboard entry.
 
