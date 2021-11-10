@@ -37,7 +37,7 @@ func WithMetrics() MiddlewareHandler {
 			wrapped := w.(*responseWriter)
 			next.ServeHTTP(wrapped, r.WithContext(ctx))
 
-			ctx, span = tr.Start(ctx, "record metrics")
+			_, span = tr.Start(ctx, "record metrics")
 			defer span.End()
 
 			totalRequests.WithLabelValues(r.URL.Path, r.Method, strconv.Itoa(wrapped.Status)).Inc()

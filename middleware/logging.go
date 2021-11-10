@@ -23,7 +23,7 @@ func WithLogging() MiddlewareHandler {
 
 			next.ServeHTTP(wrapped, r.WithContext(ctx))
 
-			ctx, span = tr.Start(ctx, "write request to log")
+			_, span = tr.Start(ctx, "write request to log")
 			defer span.End()
 
 			log.Info().

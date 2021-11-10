@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	OPENAPI_TAGS = []api.Tag{
+	OpenApiTags = []api.Tag{
 		{Name: "Health", Description: "Endpoints reporting the health of the application"},
 	}
 )
@@ -90,7 +90,7 @@ func NewGetHealthEndpoint() endpoint.EndpointHandler {
 		endpoint.WithSpecification(api.Path{
 			Summary:     "Get health information about the service",
 			Description: ``,
-			Tags:        OPENAPI_TAGS,
+			Tags:        OpenApiTags,
 
 			Request: api.Request{
 				Description: ``,

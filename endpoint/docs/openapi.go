@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	OPENAPI_TAGS = []api.Tag{
+	OpenApiTags = []api.Tag{
 		{Name: "Documentation", Description: ""},
 	}
 )
@@ -68,7 +68,7 @@ func NewGetOpenapiEndpoint() endpoint.EndpointHandler {
 		endpoint.WithSpecification(api.Path{
 			Summary:     "OpenAPI specification",
 			Description: ``,
-			Tags:        OPENAPI_TAGS,
+			Tags:        OpenApiTags,
 
 			Request: api.Request{
 				Description: ``,

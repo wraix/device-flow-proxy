@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	OPENAPI_TAGS = []api.Tag{
+	OpenApiTags = []api.Tag{
 		{Name: "Metrics", Description: ""},
 	}
 )
@@ -19,7 +19,7 @@ var (
 type GetMetricsRequest struct{}
 type GetMetricsResponse struct{}
 
-// https://golang.org/doc/effective_go#embedding
+// GetMetricsEndpoint is using embedding, see https://golang.org/doc/effective_go#embedding
 type GetMetricsEndpoint struct {
 	endpoint.Endpoint
 }
@@ -36,7 +36,7 @@ func NewGetMetricsEndpoint() endpoint.EndpointHandler {
 		endpoint.WithSpecification(api.Path{
 			Summary:     "Get metrics from the application",
 			Description: `Get metrics from the application`,
-			Tags:        OPENAPI_TAGS,
+			Tags:        OpenApiTags,
 
 			Request: api.Request{
 				Description: `Request metrics`,

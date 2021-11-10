@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	DEFAULT_JAEGER_ENDPOINT = "http://localhost:14268/api/traces"
+	DefaultJaegerEndpoint = "http://localhost:14268/api/traces"
 )
 
 type errorHandler struct{}
@@ -23,13 +23,13 @@ func (e errorHandler) Handle(err error) {
 	log.Error().Err(err).Msg("Tracing failed")
 }
 
-// Nil version of SpanExporter to prevent import of otel in other package for type
+// SetupNilExporter is the nil version of SpanExporter to prevent import of otel in other package for type
 func SetupNilExporter() sdktrace.SpanExporter {
 	return nil
 }
 func SetupJaegerExporter(url string) (sdktrace.SpanExporter, error) {
 	if url == "" {
-		url = DEFAULT_JAEGER_ENDPOINT
+		url = DefaultJaegerEndpoint
 	}
 
 	log.Info().Msgf("Tracing will be exported to jaeger @ %s", url)
