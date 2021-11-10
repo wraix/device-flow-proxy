@@ -1,0 +1,143 @@
+name: CI
+on: [pull_request]
+jobs:
+
+  gofmt:
+    name: runner / gofmt
+    strategy:
+      matrix:
+        go-version:
+          - 1.17.x
+        os:
+          - ubuntu-18.04
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run gofmt
+        run: gofmt -w -s .
+
+      - name: Run reviewdog (github-pr-suggest)
+        uses: reviewdog/action-suggester@v1
+        with:
+          level: error
+          fail_on_error: true
+          tool_name: gofmt
+          filter_mode: diff_context
+
+  govet:
+    # No need to run govet if gofmt fails...
+    needs: gofmt
+    name: runner / govet
+    strategy:
+      matrix:
+        go-version:
+          - 1.17.x
+        os:
+          - ubuntu-18.04
+    runs-on: ${{ matrix.os }}
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check for go.mod
+        run: test -f go.mod
+
+      - uses: reviewdog/action-setup@v1
+        with:
+          reviewdog_version: v0.13.0 # Optional. [latest,nightly,v.X.Y.Z]
+      - name: Run reviewdog govet
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          go vet $(go list ./... | grep -v /vendor/) 2>&1 | reviewdog -efm="vet: %f:%l:%c: %m" -level=error -fail-on-error -reporter=github-pr-review
+
+  staticcheck:
+    needs: govet
+    name: runner / staticcheck
+    strategy:
+      matrix:
+        go-version:
+          - 1.17.x
+        os:
+          - ubuntu-18.04
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v2
+      - uses: reviewdog/action-staticcheck@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Change reviewdog reporter if you need [github-pr-check,github-check,github-pr-review].
+          reporter: github-pr-review
+          # Report all results.
+          filter_mode: nofilter
+          # Exit with 1 when it find at least one finding.
+          fail_on_error: false
+          level: warning
+          staticcheck_flags: -checks=all -fail none
+
+  build:
+    needs: govet
+    strategy:
+      matrix:
+        go-version:
+          - 1.17.x
+        os:
+          - ubuntu-18.04
+        goos-arch:
+          - 'linux/amd64'
+          - 'linux/arm64'
+          - 'darwin/amd64'
+          - 'darwin/arm64'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Checkout code
+        uses: actions/checkout@v2.4.0
+
+      - name: Get OS and arch info
+        run: |
+          GOOSARCH=${{matrix.goos-arch}}
+          GOOS=${GOOSARCH%/*}
+          GOARCH=${GOOSARCH#*/}
+          BINARY_NAME=${{github.repository}}-$GOOS-$GOARCH
+          echo "BINARY_NAME=$BINARY_NAME" >> $GITHUB_ENV
+          echo "GOOS=$GOOS" >> $GITHUB_ENV
+          echo "GOARCH=$GOARCH" >> $GITHUB_ENV
+
+      - name: Build
+        run: |
+          go build -o "$BINARY_NAME" -v
+
+  test:
+    needs: build
+    strategy:
+      matrix:
+        go-version:
+          - 1.17.x
+        os:
+          - ubuntu-18.04
+    runs-on: ${{ matrix.os }}
+    steps:
+        - name: Setup Go
+          uses: actions/setup-go@v2
+          with:
+            go-version: ${{ matrix.go-version }}
+
+        - name: Checkout code
+          uses: actions/checkout@v2.4.0
+
+        - name: Build
+          run: |
+            go test -v ./...
