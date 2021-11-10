@@ -21,17 +21,18 @@ func wrapResponseWriter(w http.ResponseWriter) *responseWriter {
 	return &responseWriter{ResponseWriter: w, Status: http.StatusOK}
 }
 
-func WithInitialization() (MiddlewareHandler) {
-  return func(next http.Handler) http.Handler {
-  	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-  		wrapped := wrapResponseWriter(w)
-  		next.ServeHTTP(wrapped, r)
-  	})
-  }
+func WithInitialization() MiddlewareHandler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			wrapped := wrapResponseWriter(w)
+			next.ServeHTTP(wrapped, r)
+		})
+	}
 }
 
 type MiddlewareHandler func(http.Handler) http.Handler
-func New(h http.Handler, handlers ...MiddlewareHandler ) http.Handler {
+
+func New(h http.Handler, handlers ...MiddlewareHandler) http.Handler {
 
 	if h == nil {
 		h = http.DefaultServeMux

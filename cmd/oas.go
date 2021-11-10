@@ -5,8 +5,8 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-	"github.com/wraix/device-flow-proxy/router"
 	"github.com/charmixer/oas/exporter"
+	"github.com/wraix/device-flow-proxy/router"
 )
 
 type oasCmd struct {

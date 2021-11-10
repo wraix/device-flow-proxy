@@ -23,28 +23,28 @@ var httpDuration = promauto.NewHistogramVec(prometheus.HistogramOpts{
 	Help: "Duration of HTTP requests.",
 }, []string{"path", "method"})
 
-func WithMetrics() (MiddlewareHandler) {
-  return func(next http.Handler) http.Handler {
-  	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-  		ctx := r.Context()
+func WithMetrics() MiddlewareHandler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := r.Context()
 
 			tr := otel.Tracer("request")
 			ctx, span := tr.Start(ctx, "middleware.metrics")
 			defer span.End()
 
-  		timer := prometheus.NewTimer(httpDuration.WithLabelValues(r.URL.Path, r.Method))
+			timer := prometheus.NewTimer(httpDuration.WithLabelValues(r.URL.Path, r.Method))
 
-  		wrapped := w.(*responseWriter)
-  		next.ServeHTTP(wrapped, r.WithContext(ctx))
+			wrapped := w.(*responseWriter)
+			next.ServeHTTP(wrapped, r.WithContext(ctx))
 
 			ctx, span = tr.Start(ctx, "record metrics")
 			defer span.End()
 
-  		totalRequests.WithLabelValues(r.URL.Path, r.Method, strconv.Itoa(wrapped.Status)).Inc()
+			totalRequests.WithLabelValues(r.URL.Path, r.Method, strconv.Itoa(wrapped.Status)).Inc()
 
-  		timer.ObserveDuration()
-  	})
-  }
+			timer.ObserveDuration()
+		})
+	}
 }
 
 func init() {

@@ -18,7 +18,7 @@ import (
 
 var (
 	OPENAPI_TAGS = []api.Tag{
-		{Name: "Documentation", Description:""},
+		{Name: "Documentation", Description: ""},
 	}
 )
 
@@ -31,6 +31,7 @@ type GetOpenapiResponse exporter.Openapi
 type GetOpenapiEndpoint struct {
 	endpoint.Endpoint
 }
+
 func (ep GetOpenapiEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 	tr := otel.Tracer("request")
@@ -46,10 +47,10 @@ func (ep GetOpenapiEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	response := app.Env.OpenAPI
 
 	responseType := ""
-  if request.Format == "json" {
+	if request.Format == "json" {
 		w.Header().Set("Content-Type", "application/json")
 		responseType = "json"
-  } else {
+	} else {
 		w.Header().Set("Content-Type", "text/plain; application/yaml; charset=utf-8")
 		responseType = "yaml"
 	}
@@ -60,26 +61,26 @@ func (ep GetOpenapiEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func NewGetOpenapiEndpoint() (endpoint.EndpointHandler) {
+func NewGetOpenapiEndpoint() endpoint.EndpointHandler {
 	ep := GetOpenapiEndpoint{}
 
 	ep.Setup(
 		endpoint.WithSpecification(api.Path{
-			Summary: "OpenAPI specification",
+			Summary:     "OpenAPI specification",
 			Description: ``,
-			Tags: OPENAPI_TAGS,
+			Tags:        OPENAPI_TAGS,
 
 			Request: api.Request{
 				Description: ``,
-				Schema: GetOpenapiRequest{},
+				Schema:      GetOpenapiRequest{},
 			},
 
 			Responses: []api.Response{{
 				Description: `Returns openapi spec in given format`,
-				Code: 200,
+				Code:        200,
 				ContentType: []string{"application/json", "application/yaml"},
-				Schema: exporter.Openapi{},
-			},/*{
+				Schema:      exporter.Openapi{},
+			}, /*{
 				Description: `error ...`,
 				Code: 400,
 				ContentType: []string{"application/json"},

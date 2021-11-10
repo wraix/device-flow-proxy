@@ -139,10 +139,6 @@ func Error(w http.ResponseWriter, msg string, status int) error {
 	return New(status).WithDetail(msg).Write(w)
 }
 
-
-
-
-
 // ValidationProblem is an example of extending the ProblemDetails structure
 // as per the form validation example in section 3 of RFC 7807, to support
 // reporting of server-side data validation errors.

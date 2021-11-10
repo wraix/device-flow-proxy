@@ -15,7 +15,7 @@ import (
 	"github.com/wraix/device-flow-proxy/endpoint"
 	"github.com/wraix/device-flow-proxy/endpoint/problem"
 
-  "github.com/charmixer/oas/api"
+	"github.com/charmixer/oas/api"
 
 	"go.opentelemetry.io/otel"
 )
