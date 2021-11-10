@@ -126,7 +126,7 @@ func NewGetDocsEndpoint() endpoint.EndpointHandler {
 		endpoint.WithSpecification(api.Path{
 			Summary:     "OpenAPI documentation",
 			Description: ``,
-			Tags:        OpenApiTags,
+			Tags:        OpenAPITags,
 
 			Request: api.Request{
 				Description: ``,

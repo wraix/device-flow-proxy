@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	OpenApiTags = []api.Tag{
+	OpenAPITags = []api.Tag{
 		{Name: "Metrics", Description: ""},
 	}
 )
@@ -36,7 +36,7 @@ func NewGetMetricsEndpoint() endpoint.EndpointHandler {
 		endpoint.WithSpecification(api.Path{
 			Summary:     "Get metrics from the application",
 			Description: `Get metrics from the application`,
-			Tags:        OpenApiTags,
+			Tags:        OpenAPITags,
 
 			Request: api.Request{
 				Description: `Request metrics`,
