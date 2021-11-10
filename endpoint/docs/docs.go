@@ -15,10 +15,11 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-type GetDocsRequest struct {}
+type GetDocsRequest struct{}
 type GetDocsEndpoint struct {
 	endpoint.Endpoint
 }
+
 func (ep *GetDocsEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	url := fmt.Sprintf("http://%s:%d/docs/openapi?format=json", app.Env.Domain, app.Env.Port)
 
@@ -53,44 +54,44 @@ func (ep *GetDocsEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-/*  w.Write([]byte(fmt.Sprintf(`
-<!doctype html> <!-- Important: must specify -->
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;600&family=Roboto+Mono&display=swap" rel="stylesheet">
-</head>
-<body>
+	/*  w.Write([]byte(fmt.Sprintf(`
+	<!doctype html> <!-- Important: must specify -->
+	<html>
+	<head>
+	  <meta charset="utf-8">
+	  <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
+	  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;600&family=Roboto+Mono&display=swap" rel="stylesheet">
+	</head>
+	<body>
 
-  <rapi-doc
-    id="rapidoc-container"
-    theme = "dark"
-    layout = "row"
-    render-style = "read"
-    show-header = "false"
-    allow-try = "false"
-    allow-server-selection = "false"
-    allow-authentication="false"
+	  <rapi-doc
+	    id="rapidoc-container"
+	    theme = "dark"
+	    layout = "row"
+	    render-style = "read"
+	    show-header = "false"
+	    allow-try = "false"
+	    allow-server-selection = "false"
+	    allow-authentication="false"
 
-    regular-font="Open Sans"
-    mono-font="Roboto Mono"
-  > </rapi-doc>
+	    regular-font="Open Sans"
+	    mono-font="Roboto Mono"
+	  > </rapi-doc>
 
-  <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
-  <script>
-    document.addEventListener('DOMContentLoaded', (event) => {
+	  <script type="module" src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"></script>
+	  <script>
+	    document.addEventListener('DOMContentLoaded', (event) => {
 
-      let docEl = document.getElementById("rapidoc-container");
+	      let docEl = document.getElementById("rapidoc-container");
 
-      let objSpec = JSON.parse(` + "`%s`" + `);
-      docEl.loadSpec(objSpec);
-    })
-  </script>
+	      let objSpec = JSON.parse(` + "`%s`" + `);
+	      docEl.loadSpec(objSpec);
+	    })
+	  </script>
 
-</body>
-</html>
-	`, spec)))*/
+	</body>
+	</html>
+		`, spec)))*/
 
 	w.Write([]byte(fmt.Sprintf(`
 <!doctype html> <!-- Important: must specify -->
@@ -109,7 +110,7 @@ func (ep *GetDocsEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
         hideDownloadButton: true
   		};
 
-  		Redoc.init(JSON.parse(` + "`%s`" + `), options, document.getElementById('redoc-container'))
+  		Redoc.init(JSON.parse(`+"`%s`"+`), options, document.getElementById('redoc-container'))
   	})
 	</script>
 
@@ -118,23 +119,23 @@ func (ep *GetDocsEndpoint) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	`, spec)))
 }
 
-func NewGetDocsEndpoint() (endpoint.EndpointHandler) {
+func NewGetDocsEndpoint() endpoint.EndpointHandler {
 	ep := GetDocsEndpoint{}
 
 	ep.Setup(
 		endpoint.WithSpecification(api.Path{
-			Summary: "OpenAPI documentation",
+			Summary:     "OpenAPI documentation",
 			Description: ``,
-			Tags: OPENAPI_TAGS,
+			Tags:        OpenAPITags,
 
 			Request: api.Request{
 				Description: ``,
-				Schema: GetDocsRequest{},
+				Schema:      GetDocsRequest{},
 			},
 
 			Responses: []api.Response{{
 				Description: `OpenAPI documentation rendered in HTML`,
-				Code: 200,
+				Code:        200,
 				ContentType: []string{"text/html"},
 				//Schema: GetHealthResponse{},
 			}},

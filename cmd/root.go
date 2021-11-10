@@ -7,7 +7,7 @@ import (
 
 	"gopkg.in/yaml.v2"
 
-  "github.com/creasty/defaults"
+	"github.com/creasty/defaults"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 
