@@ -1,0 +1,25 @@
+FROM alpine AS builder
+
+ARG OWNER
+ARG REPOSITORY
+ARG OS
+ARG ARCH
+ARG VERSION
+ARG APP
+
+RUN apk add --update --no-cache curl tar shasum
+
+WORKDIR /artifact
+
+RUN curl -O https://github.com/${OWNER}/${REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt
+RUN curl -O https://github.com/${OWNER}/${REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}.tar.gz
+RUN shasum -a 256 --ignore-missing -c ${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt
+RUN tar xvzf ${APP}_${VERSION}_${OS}_${ARCH}.tar.gz
+RUN mv ${APP}_${VERSION}_${OS}_${ARCH}.tar.gz api
+
+FROM scratch
+
+COPY --from=builder /artifact/api /app/api
+
+ENTRYPOINT ["/app/api"]
+CMD ["serve"]
