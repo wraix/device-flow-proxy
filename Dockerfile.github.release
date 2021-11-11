@@ -4,7 +4,7 @@ ARG GHA_REPOSITORY
 ARG GHA_GOOS_ARCH
 ARG GHA_VERSION
 
-RUN apk add --update --no-cache curl tar sha256sum
+RUN apk add --update --no-cache curl tar
 
 WORKDIR /artifact
 
