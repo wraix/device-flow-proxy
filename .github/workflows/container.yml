@@ -46,7 +46,4 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           secrets: |
             "github_token=${{ secrets.GITHUB_TOKEN }}"
-          build-args:
-            - GHA_REPOSITORY=${{ github.repository }}
-            - GHA_GOOS_ARCH=${{ matrix.goos-arch }}
-            - GHA_VERSION=${{ github.event.release.tag.name }}
+          build-args: GHA_REPOSITORY=${{ github.repository }},GHA_GOOS_ARCH=${{ matrix.goos-arch }},GHA_VERSION=${{ github.event.release.tag.name }}
