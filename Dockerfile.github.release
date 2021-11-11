@@ -1,21 +1,26 @@
 FROM alpine AS builder
 
-ARG OWNER
-ARG REPOSITORY
-ARG OS
-ARG ARCH
-ARG VERSION
-ARG APP
+ARG GHA_REPOSITORY
+ARG GHA_GOOS_ARCH
+ARG GHA_VERSION
 
 RUN apk add --update --no-cache curl tar shasum
 
 WORKDIR /artifact
 
-RUN curl -O https://github.com/${OWNER}/${REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt
-RUN curl -O https://github.com/${OWNER}/${REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}.tar.gz
+RUN export OS=$(echo "${GOOS_ARCH}" | cut -d / -f1)
+RUN export ARCH=$(echo "${GOOS_ARCH}" | cut -d / -f2)
+RUN export VERSION=$(echo "${GH_VERSION}" | cut -d v -f2)
+RUN export APP=$(echo "${GHA_REPOSITORY}" | cut -d / -f2)
+
+RUN --mount=type=secret,id=github_token \
+  GITHUB_TOKEN=$(cat /run/secrets/github_token) \
+  curl -H 'Authorization: Bearer ${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt
+  && curl -H 'Authorization: Bearer ${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}.tar.gz
+
 RUN shasum -a 256 --ignore-missing -c ${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt
-RUN tar xvzf ${APP}_${VERSION}_${OS}_${ARCH}.tar.gz
-RUN mv ${APP}_${VERSION}_${OS}_${ARCH}.tar.gz api
+
+RUN tar xvzf ${APP}_${VERSION}_${OS}_${ARCH}.tar.gz && mv ${APP}_${VERSION}_${OS}_${ARCH}.tar.gz api
 
 FROM scratch
 
