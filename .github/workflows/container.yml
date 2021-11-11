@@ -2,7 +2,8 @@ name: Container Images
 
 on:
   release:
-    - released
+    types:
+      - released
 
 env:
   REGISTRY: ghcr.io
