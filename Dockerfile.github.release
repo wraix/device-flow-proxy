@@ -4,7 +4,10 @@ ARG GHA_REPOSITORY
 ARG GHA_GOOS_ARCH
 ARG GHA_VERSION
 
-RUN apk add --update --no-cache curl tar
+# Install prerequisites
+
+# RUN apk add --update --no-cache curl tar
+RUN apt-get update && apt-get install -y curl
 
 WORKDIR /artifact
 
