@@ -22,13 +22,14 @@ RUN export ARCH=$(echo "${GOOS_ARCH}" | cut -d / -f2)
 RUN export VERSION=$(echo "${GH_VERSION}" | cut -d v -f2)
 RUN export APP=$(echo "${GHA_REPOSITORY}" | cut -d / -f2)
 
+#RUN --mount=type=secret,id=github_token \
+#  GITHUB_TOKEN=$(cat /run/secrets/github_token)
+
 RUN --mount=type=secret,id=github_token \
-  GITHUB_TOKEN=$(cat /run/secrets/github_token) \
+  gh auth login --with-token < $(cat /run/secrets/github_token)
 
-RUN gh auth login --with-token < $GITHUB_TOKEN
-
-RUN gh release download ${GHA_VERSION} --pattern '${APP}_${VERSION}_${OS}_checksums.txt'
-RUN gh release download ${GHA_VERSION} --pattern '${APP}_${VERSION}_${OS}_${ARCH}.tar.gz'
+RUN gh release --repo ${GHA_REPOSITORY} download ${GHA_VERSION} --pattern '${APP}_${VERSION}_${OS}_checksums.txt'
+RUN gh release --repo ${GHA_REPOSITORY} download ${GHA_VERSION} --pattern '${APP}_${VERSION}_${OS}_${ARCH}.tar.gz'
 
 #RUN --mount=type=secret,id=github_token \
 #  GITHUB_TOKEN=$(cat /run/secrets/github_token) \
