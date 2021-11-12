@@ -55,27 +55,27 @@ dockers:
   - image_templates: ["ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-arm64"]
     use: buildx
     goarch: arm64
-    dockerfile: .docker/Dockerfile
+    dockerfile: .docker/Dockerfile.goreleaser
     build_flag_templates: ["--platform=linux/arm64/v8"]
     skip_push: auto
 
   - image_templates: ["ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-amd64"]
     use: buildx
-    dockerfile: .docker/Dockerfile
+    dockerfile: .docker/Dockerfile.goreleaser
     build_flag_templates: ["--platform=linux/amd64"]
     skip_push: auto
 
   - image_templates: ["ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-arm64"]
     use: buildx
     goarch: arm64
-    dockerfile: .docker/Dockerfile
+    dockerfile: .docker/Dockerfile.goreleaser
     build_flag_templates: ["--platform=darwin/arm64"]
     skip_push: auto
 
   - image_templates: ["ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-amd64"]
     use: buildx
     goarch: amd64
-    dockerfile: .docker/Dockerfile
+    dockerfile: .docker/Dockerfile.goreleaser
     build_flag_templates: ["--platform=darwin/amd64"]
     skip_push: auto
 
