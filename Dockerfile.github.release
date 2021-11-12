@@ -21,6 +21,8 @@ RUN --mount=type=secret,id=github_token \
   curl -H 'Authorization: Bearer ${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt \
   && curl -H 'Authorization: Bearer ${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}.tar.gz
 
+RUN cat ${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt
+
 RUN sha256sum --ignore-missing -c ${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt
 
 RUN tar xvzf ${APP}_${VERSION}_${OS}_${ARCH}.tar.gz && mv ${APP}_${VERSION}_${OS}_${ARCH}.tar.gz api
