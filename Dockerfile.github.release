@@ -3,6 +3,7 @@ FROM ubuntu:18.04 AS builder
 ARG GHA_REPOSITORY
 ARG GHA_GOOS_ARCH
 ARG GHA_VERSION
+ARG GHA_USER
 
 # Install prerequisites
 
@@ -17,8 +18,11 @@ RUN export VERSION=$(echo "${GH_VERSION}" | cut -d v -f2)
 RUN export APP=$(echo "${GHA_REPOSITORY}" | cut -d / -f2)
 
 RUN --mount=type=secret,id=github_token \
+  cat /run/secrets/github_token
+
+RUN --mount=type=secret,id=github_token \
   GITHUB_TOKEN=$(cat /run/secrets/github_token) \
-  curl -v -H 'Authorization: Bearer ${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt \
+  curl -v -i -u ${GHA_USER}:${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt \
   && curl -v -H 'Authorization: Bearer ${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}.tar.gz
 
 RUN cat ${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt
