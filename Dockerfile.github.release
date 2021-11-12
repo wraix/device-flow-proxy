@@ -6,8 +6,14 @@ ARG GHA_VERSION
 
 # Install prerequisites
 
-# RUN apk add --update --no-cache curl tar
-RUN apt-get update && apt-get install -y curl
+RUN apt update && apt install -y \
+  curl \
+  gpg
+
+RUN curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg;
+RUN echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null;
+RUN apt update && apt install -y \
+  gh
 
 WORKDIR /artifact
 
@@ -17,14 +23,17 @@ RUN export VERSION=$(echo "${GH_VERSION}" | cut -d v -f2)
 RUN export APP=$(echo "${GHA_REPOSITORY}" | cut -d / -f2)
 
 RUN --mount=type=secret,id=github_token \
- echo "test-" \
-  cat /run/secrets/github_token \
- echo "-test"
-
-RUN --mount=type=secret,id=github_token \
   GITHUB_TOKEN=$(cat /run/secrets/github_token) \
-  curl -v -i -u wraix:${GITHUB_TOKEN} -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt \
-  && curl -v -H 'Authorization: Bearer ${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}.tar.gz
+
+RUN gh auth login --with-token < $GITHUB_TOKEN
+
+RUN gh release download ${GHA_VERSION} --pattern '${APP}_${VERSION}_${OS}_checksums.txt'
+RUN gh release download ${GHA_VERSION} --pattern '${APP}_${VERSION}_${OS}_${ARCH}.tar.gz'
+
+#RUN --mount=type=secret,id=github_token \
+#  GITHUB_TOKEN=$(cat /run/secrets/github_token) \
+#  curl -v -H 'Authorization: token ${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt \
+#  && curl -v -H 'Authorization: token ${GITHUB_TOKEN}' -O https://github.com/${GHA_REPOSITORY}/releases/download/${VERSION}/${APP}_${VERSION}_${OS}_${ARCH}.tar.gz
 
 RUN cat ${APP}_${VERSION}_${OS}_${ARCH}_checksums.txt
 
