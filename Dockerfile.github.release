@@ -1,4 +1,4 @@
-FROM alpine AS builder
+FROM ubuntu:18.04 AS builder
 
 ARG GHA_REPOSITORY
 ARG GHA_GOOS_ARCH
