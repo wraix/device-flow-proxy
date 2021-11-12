@@ -34,15 +34,7 @@ builds:
     # Defaults are 386, amd64 and arm64.
     goarch:
       - amd64
-      - arm
       - arm64
-
-    # GOARM to build for when GOARCH is arm.
-    # For more info refer to: https://golang.org/doc/install/source#environment
-    # Default is only 6.
-    goarm:
-      - 6
-      - 7
 
 checksum:
   algorithm: sha256
@@ -60,20 +52,59 @@ release:
   name_template: "{{.Tag}}"
 
 dockers:
-  - dockerfile: .docker/Dockerfile.bin
-    use: docker
-    ids:
-      - device-flow-proxy
-    goos:
-      - linux
-      - darwin
-    goarch:
-      - amd64
-      - arm
-      - arm64
+  - image_templates: ["ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-arm64"]
+    use: buildx
+    goarch: arm64
+    dockerfile: .docker/Dockerfile
+    build_flag_templates: ["--platform=linux/arm64/v8"]
+    skip_push: auto
+
+  - image_templates: ["ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-amd64"]
+    use: buildx
+    dockerfile: .docker/Dockerfile
+    build_flag_templates: ["--platform=linux/amd64"]
+    skip_push: auto
+
+  - image_templates: ["ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-arm64"]
+    use: buildx
+    goarch: arm64
+    dockerfile: .docker/Dockerfile
+    build_flag_templates: ["--platform=darwin/arm64"]
+    skip_push: auto
+
+  - image_templates: ["ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-amd64"]
+    use: buildx
+    goarch: amd64
+    dockerfile: .docker/Dockerfile
+    build_flag_templates: ["--platform=darwin/amd64"]
+    skip_push: auto
+
+docker_manifests:
+  - name_template: ghcr.io/wraix/{{.ProjectName}}:v{{ .Major }}
     image_templates:
-      - "ghcr.io/wraix/{{.ProjectName}}:v{{ .Major }}"
-      - "ghcr.io/wraix/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}"
-      - "ghcr.io/wraix/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
-      - "ghcr.io/wraix/{{.ProjectName}}:latest"
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-arm64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-amd64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-arm64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-amd64
+    skip_push: auto
+  - name_template: ghcr.io/wraix/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}
+    image_templates:
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-arm64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-amd64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-arm64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-amd64
+    skip_push: auto
+  - name_template: ghcr.io/wraix/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}.{{ .Patch }}
+    image_templates:
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-arm64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-amd64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-arm64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-amd64
+    skip_push: auto
+  - name_template: ghcr.io/wraix/{{.ProjectName}}:latest
+    image_templates:
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-arm64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-linux-amd64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-arm64
+      - ghcr.io/wraix/{{.ProjectName}}:{{ .Version }}-darwin-amd64
     skip_push: auto
