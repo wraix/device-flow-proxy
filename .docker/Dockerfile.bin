@@ -1,0 +1,4 @@
+FROM scratch
+COPY device-flow-proxy-bin /
+ENTRYPOINT ["/device-flow-proxy-bin"]
+CMD ["serve"]

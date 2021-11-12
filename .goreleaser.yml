@@ -12,6 +12,11 @@ before:
 builds:
   # You can have multiple builds defined as a yaml list
   -
+    # Binary name.
+    # Can be a path (e.g. `bin/app`) to wrap the binary in a directory.
+    # Default is the name of the project directory.
+    binary: device-flow-proxy-bin
+
     # Custom environment variables to be set during the builds.
     # Default is empty.
     env:
@@ -42,12 +47,6 @@ builds:
 checksum:
   algorithm: sha256
 
-changelog:
-  # Sorts the changelog by the commit's messages.
-  # Could either be asc, desc or empty
-  # Default is empty
-  sort: asc
-
 release:
 
   # If set to auto, will mark the release as not ready for production
@@ -59,3 +58,22 @@ release:
   # You can change the name of the release.
   # Default is `{{.Tag}}` on OSS and `{{.PrefixedTag}}` on Pro.
   name_template: "{{.Tag}}"
+
+dockers:
+  - dockerfile: .docker/Dockerfile.bin
+    use: docker
+    ids:
+      - device-flow-proxy
+    goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm
+      - arm64
+    image_templates:
+      - "ghcr.io/wraix/{{.ProjectName}}:v{{ .Major }}"
+      - "ghcr.io/wraix/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}"
+      - "ghcr.io/wraix/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}.{{ .Patch }}"
+      - "ghcr.io/wraix/{{.ProjectName}}:latest"
+    skip_push: auto
