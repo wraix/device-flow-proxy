@@ -26,7 +26,7 @@ RUN export APP=$(echo "${GHA_REPOSITORY}" | cut -d / -f2)
 #  GITHUB_TOKEN=$(cat /run/secrets/github_token)
 
 RUN --mount=type=secret,id=github_token \
-  gh auth login --with-token < $(cat /run/secrets/github_token)
+  gh auth login --with-token < /run/secrets/github_token
 
 RUN gh release --repo ${GHA_REPOSITORY} download ${GHA_VERSION} --pattern '${APP}_${VERSION}_${OS}_checksums.txt'
 RUN gh release --repo ${GHA_REPOSITORY} download ${GHA_VERSION} --pattern '${APP}_${VERSION}_${OS}_${ARCH}.tar.gz'
