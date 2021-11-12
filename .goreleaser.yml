@@ -25,7 +25,7 @@ builds:
     # Custom ldflags templates.
     # Default is `-s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{.Date}} -X main.builtBy=goreleaser`.
     ldflags:
-      - -s -w -X main.version={{.Version}} -X main.commit={{.FullCommit}} -X main.date={{.Date}} -X main.tag={{.Tag}}
+      - -s -w -X main.version={{.Version}} -X main.commit={{.FullCommit}} -X main.date={{.Date}} -X main.tag={{.Tag}} -X main.name={{.ProjectName}}
 
     # GOOS list to build for.
     # For more info refer to: https://golang.org/doc/install/source#environment

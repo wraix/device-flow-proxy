@@ -5,16 +5,15 @@ import (
 
 	"gopkg.in/yaml.v2"
 
+  "github.com/wraix/device-flow-proxy/app"
 	"github.com/charmixer/oas/exporter"
 	"github.com/wraix/device-flow-proxy/router"
 )
 
-type oasCmd struct {
-	// version   bool `short:"v" long:"version" description:"display version"`
-}
+type oasCmd struct {}
 
 func (v *oasCmd) Execute(args []string) error {
-	router := router.NewRouter(Application.Name, Application.Description, Application.Version)
+	router := router.NewRouter(app.Env.Build.Name, Application.Description, app.Env.Build.Version)
 
 	oasModel := exporter.ToOasModel(router.OpenAPI)
 	oasYaml, err := yaml.Marshal(&oasModel)

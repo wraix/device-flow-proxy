@@ -77,7 +77,7 @@ func (cmd *serveCmd) initTracing() func() {
 		return nil
 	}
 
-	shutdownTracing, err := tracing.SetupTracing(exporter, Application.Name, Application.Environment, Application.Version)
+	shutdownTracing, err := tracing.SetupTracing(exporter, app.Env.Build.Name, Application.Environment, app.Env.Build.Version)
 	if err == nil {
 		return shutdownTracing
 	}
@@ -96,7 +96,7 @@ func (cmd *serveCmd) Execute(args []string) error {
 	shutdown := cmd.initTracing()
 	defer shutdown()
 
-	router := router.NewRouter(Application.Name, Application.Description, Application.Version)
+	router := router.NewRouter(app.Env.Build.Name, Application.Description, app.Env.Build.Version)
 
 	oasModel := exporter.ToOasModel(
 		router.OpenAPI,

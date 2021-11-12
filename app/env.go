@@ -11,6 +11,14 @@ type Environment struct {
 	Addr   string
 	Domain string
 
+  Build struct {
+		Name string
+		Version string
+		Commit string
+		Date string
+		Tag string
+	}
+
 	OpenAPI oas.Openapi
 
 	BaseUrl               string
