@@ -135,3 +135,8 @@ Response should look something like:
 ```
 
 Enjoy.
+
+
+## Shout out
+
+* [charmixer](https://github.com/charmixer) for providing an golang api template to get started. [check it out](https://github.com/charmixer/golang-api-template)
