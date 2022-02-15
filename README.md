@@ -139,4 +139,4 @@ Enjoy.
 
 ## Shout out
 
-* [charmixer](https://github.com/charmixer) for providing a golang api template to get started. [check it out](https://github.com/charmixer/golang-api-template)
+* [charmixer](https://github.com/charmixer) for providing a [golang api template](https://github.com/charmixer/golang-api-template) to get started.
